@@ -12,6 +12,14 @@ public interface CartService {
 
     boolean removeProductFromCart(String productCode) throws Exception;
 
+    void updateCart(String productCode , int quantity) throws Exception;
+
+    boolean emptyCart();
+
+    void calculateCart(Cart cart) throws Exception;
+
+    //update eklenecek
+
     //empty eklenecek
 
 }

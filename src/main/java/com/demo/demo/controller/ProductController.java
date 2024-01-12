@@ -61,7 +61,7 @@ public class ProductController {
             productService.deleteProduct(productCode);
             return new ResponseEntity<>("Product deleted",HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST)
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 

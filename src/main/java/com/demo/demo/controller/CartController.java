@@ -26,24 +26,8 @@ public class CartController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/addCart/{cartCode}")
-    public ResponseEntity updateCart(@RequestParam String productCode, @RequestParam int quantity){
-        try {
-            cartService.addProductToCart(productCode,quantity);
-            return new ResponseEntity<>("Successfully adding",HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-    @DeleteMapping("/deleteCart/{cartCode}")
-    public ResponseEntity deleteCart(@RequestParam String productCode ){
-        try {
-            cartService.removeProductFromCart(productCode);
-            return new ResponseEntity<>("Successfully deleted", HttpStatus.OK);
-        }catch (Exception e){
-          return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
+
+
 
     //empty eklenecek
 }

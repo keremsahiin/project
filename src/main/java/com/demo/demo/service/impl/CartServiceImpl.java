@@ -9,6 +9,8 @@ import com.demo.demo.service.CartService;
 import com.demo.demo.service.ProductService;
 import com.demo.demo.service.SessionService;
 import jakarta.annotation.Resource;
+import org.hibernate.jdbc.Expectation;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -29,6 +31,12 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart getCartForCustomer(Customer customer) {
         final Optional<Cart> optionalCart = cartRepository.findCartByCustomer(customer);
+        if (optionalCart.isPresent()){
+            Cart cart = optionalCart.get();
+            calculateCart(cart);
+        }else {
+            new Cart();
+        }
         return optionalCart.orElse(new Cart());
     }
 
@@ -47,6 +55,7 @@ public class CartServiceImpl implements CartService {
 
             entries.add(entry);
             cart.setEntries(entries);
+            calculateCart(cart);
             cartRepository.save(cart);
 
             return true;
@@ -68,6 +77,7 @@ public class CartServiceImpl implements CartService {
             entries.remove(targetEntry);
 
             cart.setEntries(entries);
+            calculateCart(cart);
             cartRepository.save(cart);
 
             return true;
@@ -75,5 +85,47 @@ public class CartServiceImpl implements CartService {
             throw new Exception("User not found.");
         }
     }
+
+    @Override
+    public void updateCart(String productCode, int quantity) throws Exception {
+        Product product = productService.getProductForCode(productCode);
+        Cart cart = sessionService.getCurrentCart();
+        if (quantity < product.getStockValue()) {
+            if (quantity <= 0) {
+                throw new Exception("Wrong parameter" + productCode);
+            }
+            if (Objects.nonNull(cart)) {
+                Entry entry = cart.getEntries().stream().filter(entry1 -> entry1.getProduct().equals(product)).findFirst()
+                        .orElseThrow();
+                entry.setQuantity(quantity);
+                calculateCart(cart);
+                cartRepository.save(cart);
+            } else {
+                throw new Exception();
+            }
+        }
+    }
+
+    @Override
+    public boolean emptyCart() {
+        return false;
+    }
+
+    @Override
+    public void calculateCart(Cart cart) throws Exception {
+        double total = 0;
+        if(CollectionUtils.isEmpty(cart.getEntries())){
+            throw new Exception("Its empty!!");
+        }else {
+            for (Entry entry : cart.getEntries()) {
+                Double price = entry.getProduct().getPrice();
+                Integer quantity = entry.getQuantity();
+                total = total + (price * quantity);
+            }
+        }
+        cart.setTotalPriceOfProducts(total);
+        cartRepository.save(cart);
+    }
+
 
 }
