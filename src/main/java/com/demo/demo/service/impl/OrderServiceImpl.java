@@ -8,9 +8,12 @@ import com.demo.demo.service.OrderService;
 import com.demo.demo.service.SessionService;
 import jakarta.annotation.Resource;
 import org.modelmapper.ModelMapper;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class OrderServiceImpl implements OrderService {
 
@@ -22,6 +25,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private SessionService sessionService;
+
+
 
     @Override
     public void placeOrder() throws Exception {
@@ -49,8 +54,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllOrdersForCustomer() throws Exception {
         Customer customer = sessionService.getCurrentCustomer();
-        List<Order> orders = orderRepository.getOrderByCustomer(customer);
-        if
-
+        List<Order> orders = orderRepository.getAllOrderByCustomer(customer);
+        if(CollectionUtils.isEmpty(orders)){
+            return null;
+        }else {
+            for (Order order : orders){
+                Set<Order> orders1 = order.getEntries()
+                        .stream()
+                        .map(orders2 -> modelMapper.map(orders2, Order.class))
+                        .collect(Collectors.toSet());
+                orderRepository.getOrderByCustomer(customer);
+                orders.add(order);
+            }
+        }
+        return null;
     }
 }

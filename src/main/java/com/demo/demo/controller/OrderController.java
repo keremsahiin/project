@@ -32,6 +32,6 @@ public class OrderController {
 
     }
 
-    @GetMapping("/getAllOrderForCustomer/{customerCode}")
+  //  @GetMapping("/getAllOrderForCustomer/{customerCode}")
 
 }

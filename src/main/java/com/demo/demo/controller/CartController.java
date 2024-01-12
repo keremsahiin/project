@@ -26,8 +26,17 @@ public class CartController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+    @PutMapping("/updateCart")
+    public ResponseEntity updateCart(@RequestParam String productCode , @RequestParam int quantity){
+        try {
+            cartService.updateCart(productCode,quantity);
+            return new ResponseEntity<>("Cart succesfully updated!", HttpStatus.OK);
 
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 
-
+   // @DeleteMapping("/emptyCart/")
     //empty eklenecek
 }

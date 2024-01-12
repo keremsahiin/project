@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> getOrderByCustomer(Customer customer);
     Optional<Order> getOrderId(String code);
+    List<Order> getAllOrderByCustomer(Customer customer);
 }

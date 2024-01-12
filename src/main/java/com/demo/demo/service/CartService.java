@@ -5,7 +5,7 @@ import com.demo.demo.entity.Customer;
 
 public interface CartService {
 
-    Cart getCartForCustomer(Customer customer);
+    Cart getCartForCustomer(Customer customer) throws Exception;
 
     boolean addProductToCart(String productCode, int quantity) throws Exception;
 
@@ -17,9 +17,5 @@ public interface CartService {
     boolean emptyCart();
 
     void calculateCart(Cart cart) throws Exception;
-
-    //update eklenecek
-
-    //empty eklenecek
 
 }

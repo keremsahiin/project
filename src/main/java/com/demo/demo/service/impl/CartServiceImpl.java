@@ -29,7 +29,7 @@ public class CartServiceImpl implements CartService {
     private ProductService productService;
 
     @Override
-    public Cart getCartForCustomer(Customer customer) {
+    public Cart getCartForCustomer(Customer customer) throws Exception {
         final Optional<Cart> optionalCart = cartRepository.findCartByCustomer(customer);
         if (optionalCart.isPresent()){
             Cart cart = optionalCart.get();

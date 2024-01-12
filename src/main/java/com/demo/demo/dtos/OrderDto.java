@@ -1,7 +1,9 @@
 package com.demo.demo.dtos;
 
+import com.demo.demo.entity.Order;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 @Data
 @Getter
@@ -10,7 +12,11 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class OrderDto {
     String id;
+
     Set<EntryDto> entries;
+
     Double totalPriceOfProducts;
+
     Double totalPrice;
+
 }
