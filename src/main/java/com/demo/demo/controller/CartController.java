@@ -37,11 +37,11 @@ public class CartController {
         }
     }
 
-    @DeleteMapping("/emptyCart/")
+    @DeleteMapping("/emptyCart")
     public ResponseEntity emptyCart(){
-        Customer customer = sessionService.getCurrentCustomer();
         try {
-                return new ResponseEntity<>(cartService.emptyCart(),HttpStatus.OK);
+            cartService.emptyCart();
+            return new ResponseEntity<>("Cart is empty now.",HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }

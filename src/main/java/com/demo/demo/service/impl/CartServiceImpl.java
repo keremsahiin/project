@@ -108,15 +108,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void emptyCart(Customer customer) throws Exception {
-        final Optional<Cart> optionalCart = cartRepository.findCartByCustomer(customer);
+    public void emptyCart() throws Exception {
         Cart cart = sessionService.getCurrentCart();
-        if (optionalCart.isPresent()){
-            cartRepository.deleteAll((Iterable<? extends Cart>) cart);
+        if (Objects.nonNull(cart)){
+            cartRepository.delete(cart);
             cartRepository.save(cart);
-        }
-        else {
-            new Cart();
         }
     }
 

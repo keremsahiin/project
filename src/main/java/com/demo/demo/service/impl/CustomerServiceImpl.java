@@ -18,20 +18,18 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
     @Resource
     private ModelMapper modelMapper;
-    @Resource
-    private CustomerService customerService;
 
     // TODO: Inversion Of Control (IoC), Dependency Injection, Ioc Container (Springte ApplicationContext) -> bunlar çok önemli
     //  Bean, Scope, Filter -> yüzeysel araştır
     //  Bean vs Java Objesi farkını araştır.
     //  resource vs autowired arası fark
     public Boolean isCustomerExists(String username) {
-        Optional<Customer> customerByUsername = customerRepository.getCustomerUsername(username);
+        Optional<Customer> customerByUsername = customerRepository.getCustomerByUsername(username);
         return customerByUsername.isPresent();
     }
 
     public void addCustomer(CustomerDto customerDto) throws Exception {
-        Optional<Customer> optionalCustomer = customerRepository.getCustomerUsername(customerDto.getUsername());
+        Optional<Customer> optionalCustomer = customerRepository.getCustomerByUsername(customerDto.getUsername());
         if(optionalCustomer.isPresent()){
             throw new Exception("Customer is not found");
         }
@@ -41,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findCustomerByUsername(String username) throws Exception {
-        final Optional<Customer> optionalCustomer = customerRepository.getCustomerUsername(username);
+        final Optional<Customer> optionalCustomer = customerRepository.getCustomerByUsername(username);
         if (optionalCustomer.isPresent()) {
             return optionalCustomer.get();
         }

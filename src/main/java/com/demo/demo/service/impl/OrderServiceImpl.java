@@ -4,7 +4,6 @@ import com.demo.demo.dtos.EntryDto;
 import com.demo.demo.dtos.OrderDto;
 import com.demo.demo.entity.Cart;
 import com.demo.demo.entity.Customer;
-import com.demo.demo.entity.Entry;
 import com.demo.demo.entity.Order;
 import com.demo.demo.repository.OrderRepository;
 import com.demo.demo.service.OrderService;
@@ -46,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderForCode(String code) throws Exception {
-        final Optional<Order> orderOptional = orderRepository.getOrderId(code);
+        final Optional<Order> orderOptional = orderRepository.getOrderById(Long.parseLong(code));
         if (orderOptional.isPresent()) {
             return orderOptional.get();
         } else {
@@ -57,21 +56,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getAllOrdersForCustomer() throws Exception {
         Customer customer = sessionService.getCurrentCustomer();
-        List<OrderDto> orders = orderRepository.getAllOrderByCustomer(customer);
+        List<Order> orders = orderRepository.getAllOrdersByCustomer(customer);
         List<OrderDto> orderDtos = new LinkedList<>();
         if (CollectionUtils.isEmpty(orders)) {
             return Collections.emptyList();
         } else {
-            for (OrderDto order : orders) {
+            for (Order order : orders) {
                 OrderDto orderDto = new OrderDto();
-                orderDto.setCode(order.getCode().toString());
-                orderDto.setTotalPrice(order.getTotalPrice());
                 Set<EntryDto> entries = order.getEntries()
                         .stream()
                         .map(entryDto -> modelMapper.map(entryDto , EntryDto.class))
                         .collect(Collectors.toSet());
                 orderDto.setEntries(entries);
-                orderDto.setCode(order.getCode());
+                orderDto.setCode(String.valueOf(order.getId()));
                 orderDto.setTotalPrice(order.getTotalPrice());
                 orderDto.setTotalPriceOfProducts(order.getTotalPriceOfProducts());
                 orderDtos.add(orderDto);

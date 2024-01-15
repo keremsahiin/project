@@ -15,13 +15,7 @@ public interface CartService {
 
     void updateCart(String productCode , int quantity) throws Exception;
 
-    boolean emptyCart();
-
-    void emptyCart(Cart cart) throws Exception;
-
-    void emptyCart(Cart cart, Product product) throws Exception;
-
-    void emptyCart(Customer customer) throws Exception;
+    void emptyCart() throws Exception;
 
     void calculateCart(Cart cart) throws Exception;
 
