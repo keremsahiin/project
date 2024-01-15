@@ -6,11 +6,14 @@ import com.demo.demo.repository.ProductRepository;
 import com.demo.demo.service.ProductService;
 import com.demo.demo.service.SessionService;
 import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     @Resource

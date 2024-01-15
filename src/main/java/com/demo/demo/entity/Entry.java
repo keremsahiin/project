@@ -3,12 +3,16 @@ package com.demo.demo.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.*;
 
-@Data
 @Entity
 @Table(name = "entries")
-public class Entry {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class Entry extends BaseEntity {
 
     @OneToOne
     private Product product;

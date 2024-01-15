@@ -9,7 +9,8 @@ import com.demo.demo.service.CartService;
 import com.demo.demo.service.ProductService;
 import com.demo.demo.service.SessionService;
 import jakarta.annotation.Resource;
-import org.hibernate.jdbc.Expectation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
@@ -17,6 +18,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+@Service
+@RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
     @Resource
@@ -41,7 +44,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public boolean addProductToCart(String productCode, int quantity) throws Exception {
+    public void addProductToCart(String productCode, int quantity) throws Exception {
         final Customer currentCustomer = sessionService.getCurrentCustomer();
         if (Objects.nonNull(currentCustomer)) {
             final Cart cart = sessionService.getCurrentCart();
@@ -58,7 +61,6 @@ public class CartServiceImpl implements CartService {
             calculateCart(cart);
             cartRepository.save(cart);
 
-            return true;
         } else {
             throw new Exception("User not found.");
         }
@@ -66,7 +68,7 @@ public class CartServiceImpl implements CartService {
 
     //stream araştır!!
     @Override
-    public boolean removeProductFromCart(String productCode) throws Exception {
+    public void removeProductFromCart(String productCode) throws Exception {
         final Customer currentCustomer = sessionService.getCurrentCustomer();
         if (Objects.nonNull(currentCustomer)) {
             final Cart cart = sessionService.getCurrentCart();
@@ -80,7 +82,6 @@ public class CartServiceImpl implements CartService {
             calculateCart(cart);
             cartRepository.save(cart);
 
-            return true;
         } else {
             throw new Exception("User not found.");
         }
@@ -107,8 +108,16 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public boolean emptyCart() {
-        return false;
+    public void emptyCart(Customer customer) throws Exception {
+        final Optional<Cart> optionalCart = cartRepository.findCartByCustomer(customer);
+        Cart cart = sessionService.getCurrentCart();
+        if (optionalCart.isPresent()){
+            cartRepository.deleteAll((Iterable<? extends Cart>) cart);
+            cartRepository.save(cart);
+        }
+        else {
+            new Cart();
+        }
     }
 
     @Override

@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.modelmapper.*;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,14 +30,13 @@ public class CustomerServiceImpl implements CustomerService {
         return customerByUsername.isPresent();
     }
 
-    public boolean addCustomer(CustomerDto customerDto) throws Exception {
+    public void addCustomer(CustomerDto customerDto) throws Exception {
         Optional<Customer> optionalCustomer = customerRepository.getCustomerUsername(customerDto.getUsername());
         if(optionalCustomer.isPresent()){
             throw new Exception("Customer is not found");
         }
         Customer customer = modelMapper.map(customerDto, Customer.class);
         customerRepository.save(customer);
-        return true;
     }
 
     @Override

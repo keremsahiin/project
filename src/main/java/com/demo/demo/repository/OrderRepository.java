@@ -1,5 +1,6 @@
 package com.demo.demo.repository;
 
+import com.demo.demo.dtos.OrderDto;
 import com.demo.demo.entity.Customer;
 import com.demo.demo.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    List<Order> getOrderByCustomer(Customer customer);
     Optional<Order> getOrderId(String code);
-    List<Order> getAllOrderByCustomer(Customer customer);
+    List<OrderDto> getAllOrderByCustomer(Customer customer);
 }

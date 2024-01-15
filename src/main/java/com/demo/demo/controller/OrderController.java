@@ -23,7 +23,7 @@ public class OrderController {
     }
 
     @GetMapping("/getOrder/{orderCode}")
-    private ResponseEntity getOrderByCode(@PathVariable String orderCode){
+    public ResponseEntity getOrderByCode(@PathVariable String orderCode){
        try {
            return new ResponseEntity<>(orderService.getOrderForCode(orderCode),HttpStatus.OK);
        }catch (Exception e){
@@ -32,6 +32,14 @@ public class OrderController {
 
     }
 
-  //  @GetMapping("/getAllOrderForCustomer/{customerCode}")
+   @GetMapping("/getAllOrderForCustomer")
+    public ResponseEntity getAllOrderForCustomer(){
+        try {
+            return new ResponseEntity<>(orderService.getAllOrdersForCustomer(),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+   }
+
 
 }

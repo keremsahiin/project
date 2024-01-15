@@ -3,12 +3,16 @@ package com.demo.demo.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.*;
 
-@Data
 @Entity
 @Table(name = "products")
-public class Product {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class Product extends BaseEntity {
 
     @Column(unique = true)
     private String code;

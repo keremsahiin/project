@@ -1,5 +1,6 @@
 package com.demo.demo.service;
 
+import com.demo.demo.dtos.OrderDto;
 import com.demo.demo.entity.Order;
 
 import java.util.List;
@@ -9,5 +10,5 @@ public interface OrderService {
 
     Order getOrderForCode(String code) throws Exception;
 
-    public List<Order> getAllOrdersForCustomer() throws Exception;
+    public List<OrderDto> getAllOrdersForCustomer() throws Exception;
 }

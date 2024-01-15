@@ -5,7 +5,7 @@ import com.demo.demo.entity.Customer;
 
 public interface CustomerService {
     Boolean isCustomerExists(String username);
-    boolean addCustomer(CustomerDto customerDto) throws Exception;
+    void addCustomer(CustomerDto customerDto) throws Exception;
 
     Customer findCustomerByUsername(String username) throws Exception;
 }

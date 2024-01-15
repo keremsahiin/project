@@ -2,14 +2,18 @@ package com.demo.demo.entity;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
-@Data
 @Entity
 @Table(name = "orders")
-public class Order {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class Order extends BaseEntity{
 
     @OneToMany(fetch = FetchType.EAGER)
     @Nullable

@@ -2,13 +2,18 @@ package com.demo.demo.entity;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
-@Data
+
 @Table(name = "carts")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Cart extends BaseEntity{
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -1,20 +1,24 @@
 package com.demo.demo.service.impl;
 
+import com.demo.demo.dtos.EntryDto;
+import com.demo.demo.dtos.OrderDto;
 import com.demo.demo.entity.Cart;
 import com.demo.demo.entity.Customer;
+import com.demo.demo.entity.Entry;
 import com.demo.demo.entity.Order;
 import com.demo.demo.repository.OrderRepository;
 import com.demo.demo.service.OrderService;
 import com.demo.demo.service.SessionService;
 import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
-
+@Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     @Resource
@@ -25,7 +29,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private SessionService sessionService;
-
 
 
     @Override
@@ -44,29 +47,36 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrderForCode(String code) throws Exception {
         final Optional<Order> orderOptional = orderRepository.getOrderId(code);
-        if (orderOptional.isPresent()){
+        if (orderOptional.isPresent()) {
             return orderOptional.get();
-        }else{
+        } else {
             throw new Exception("Order is not found!" + code);
         }
     }
 
     @Override
-    public List<Order> getAllOrdersForCustomer() throws Exception {
+    public List<OrderDto> getAllOrdersForCustomer() throws Exception {
         Customer customer = sessionService.getCurrentCustomer();
-        List<Order> orders = orderRepository.getAllOrderByCustomer(customer);
-        if(CollectionUtils.isEmpty(orders)){
-            return null;
-        }else {
-            for (Order order : orders){
-                Set<Order> orders1 = order.getEntries()
+        List<OrderDto> orders = orderRepository.getAllOrderByCustomer(customer);
+        List<OrderDto> orderDtos = new LinkedList<>();
+        if (CollectionUtils.isEmpty(orders)) {
+            return Collections.emptyList();
+        } else {
+            for (OrderDto order : orders) {
+                OrderDto orderDto = new OrderDto();
+                orderDto.setCode(order.getCode().toString());
+                orderDto.setTotalPrice(order.getTotalPrice());
+                Set<EntryDto> entries = order.getEntries()
                         .stream()
-                        .map(orders2 -> modelMapper.map(orders2, Order.class))
+                        .map(entryDto -> modelMapper.map(entryDto , EntryDto.class))
                         .collect(Collectors.toSet());
-                orderRepository.getOrderByCustomer(customer);
-                orders.add(order);
+                orderDto.setEntries(entries);
+                orderDto.setCode(order.getCode());
+                orderDto.setTotalPrice(order.getTotalPrice());
+                orderDto.setTotalPriceOfProducts(order.getTotalPriceOfProducts());
+                orderDtos.add(orderDto);
             }
+            return orderDtos;
         }
-        return null;
     }
 }
