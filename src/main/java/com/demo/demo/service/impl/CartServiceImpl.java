@@ -5,6 +5,7 @@ import com.demo.demo.entity.Customer;
 import com.demo.demo.entity.Entry;
 import com.demo.demo.entity.Product;
 import com.demo.demo.repository.CartRepository;
+import com.demo.demo.repository.EntryRepository;
 import com.demo.demo.service.CartService;
 import com.demo.demo.service.ProductService;
 import com.demo.demo.service.SessionService;
@@ -31,16 +32,21 @@ public class CartServiceImpl implements CartService {
     @Resource
     private ProductService productService;
 
+    @Resource
+    private EntryRepository entryRepository;
+
     @Override
     public Cart getCartForCustomer(Customer customer) throws Exception {
         final Optional<Cart> optionalCart = cartRepository.findCartByCustomer(customer);
         if (optionalCart.isPresent()){
             Cart cart = optionalCart.get();
             calculateCart(cart);
+            return cart;
         }else {
-            new Cart();
+            Cart cart = new Cart();
+            cart.setCustomer(customer);
+            return cart;
         }
-        return optionalCart.orElse(new Cart());
     }
 
     @Override
@@ -48,13 +54,17 @@ public class CartServiceImpl implements CartService {
         final Customer currentCustomer = sessionService.getCurrentCustomer();
         if (Objects.nonNull(currentCustomer)) {
             final Cart cart = sessionService.getCurrentCart();
-            final Set<Entry> entries = new HashSet<>(cart.getEntries());
+            final Set<Entry> entries = cart.getEntries() != null ? new HashSet<>(cart.getEntries()) : new HashSet<>();
 
             final Product product = productService.getProductForCode(productCode);
+            if(quantity > product.getStockValue()){
+                throw new Exception("QUANTITY MUST BE LESS THAN OR EQUAL STOCKVALUE!");
+            }
             final Entry entry = new Entry();
             entry.setProduct(product);
             entry.setQuantity(quantity);
             entry.setEntryPrice(product.getPrice() * quantity);
+            entryRepository.save(entry);
 
             entries.add(entry);
             cart.setEntries(entries);

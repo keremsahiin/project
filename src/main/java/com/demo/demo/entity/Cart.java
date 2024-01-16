@@ -16,9 +16,6 @@ import java.util.Set;
 @Builder
 public class Cart extends BaseEntity{
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(unique = true)
-    private String code;
 
     @OneToMany(fetch = FetchType.EAGER)
     @Nullable

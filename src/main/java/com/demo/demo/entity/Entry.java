@@ -1,6 +1,7 @@
 package com.demo.demo.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -14,7 +15,7 @@ import lombok.*;
 @Builder
 public class Entry extends BaseEntity {
 
-    @OneToOne
+    @ManyToOne
     private Product product;
 
     private int quantity;

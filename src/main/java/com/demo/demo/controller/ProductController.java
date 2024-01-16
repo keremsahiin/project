@@ -28,7 +28,7 @@ public class ProductController {
     public ResponseEntity getProductByCode(@PathVariable String productCode){
         try{
             Product product = productService.getProductForCode(productCode);
-            return new ResponseEntity<>(modelMapper.map(product, ProductRepository.class),HttpStatus.OK);
+            return  new ResponseEntity<>(modelMapper.map(product, ProductDto.class),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -65,8 +65,8 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/add-Product-To-Cart/{productCode}")
-    public ResponseEntity addProductToCart(@RequestParam String productCode, @RequestParam Integer qty) {
+    @PostMapping("/add-Product-To-Cart/{productCode}/{qty}")
+    public ResponseEntity addProductToCart(@PathVariable String productCode, @PathVariable Integer qty) {
         try {
             cartService.addProductToCart(productCode,qty);
             return new ResponseEntity<>("Added product to cart", HttpStatus.OK);

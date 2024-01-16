@@ -48,7 +48,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateProduct(String code, ProductDto productDto) throws Exception {
         Product product = this.getProductForCode(code);
-        product = modelMapper.map(productDto , Product.class);
+        if(productDto.getCode() != null){
+            product.setCode(productDto.getCode());
+        }
+        if(productDto.getName() != null){
+            product.setName(productDto.getName());
+        }
+        if(productDto.getStockValue() != null){
+            product.setStockValue(productDto.getStockValue());
+        }
+        if(productDto.getPrice() != null){
+            product.setPrice(productDto.getPrice());
+        }
         productRepository.save(product);
     }
 }
